@@ -23,12 +23,17 @@ import com.common.utils._getString
 object PataUpManager : MyLogger {
 
     private val LAST_PATA_STATUS_PREF = "LAST_PATA_STATUS_PREF"
+    private val INTERNAL_SCANNING_PREF = "INTERNAL_SCANNING_PREF"
     private val NOTIFICATION_ID = 1234521
 
-    private var internalScanning = false
+    internal var internalScanning: Boolean
+        get() = CommonApplication.instance.getPreferences().getBoolean(INTERNAL_SCANNING_PREF, false)
+        set(value) {
+            CommonApplication.instance.getPreferences().edit().putBoolean(INTERNAL_SCANNING_PREF, value).apply()
+        }
 
     var scanning = false
-        get() = internalScanning || PataUpInspectorService.instance?.isScanning() ?: false
+        get() = internalScanning
         set(value) {
             field = value
             internalScanning = value

@@ -37,7 +37,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         }
 
         animIn()
-
     }
 
     fun animIn() {
@@ -54,6 +53,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
     fun onPataStatusChange(pataUp: Boolean) {
         val scanOn = PataUpManager.scanning
+        logRed("onPataStatusChange scanOn:$scanOn pataUp:$pataUp")
 
         BINDING_VIEWS.scanButton.isSelected = scanOn
         BINDING_VIEWS.scanButton.text = getString(if (scanOn) R.string.on else R.string.off)

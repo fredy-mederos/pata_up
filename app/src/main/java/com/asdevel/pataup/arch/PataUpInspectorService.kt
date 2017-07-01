@@ -27,6 +27,7 @@ class PataUpInspectorService : Service(), MyLogger {
         stoping = false
         checkPata()
         logRed("onStartCommand")
+        PataUpManager.internalScanning = true
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -57,26 +58,15 @@ class PataUpInspectorService : Service(), MyLogger {
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-    }
-
-    fun isScanning() = !stoping
-
     override fun onDestroy() {
         stoping = true
         logRed("onDestroy")
-        instance = null
+        PataUpManager.internalScanning = false
         super.onDestroy()
     }
 
     fun onGetPataStatus(pataUp: Boolean) {
         logRed("onGetPataStatus -> pataUp: $pataUp")
         PataUpManager.onPataStateChangeTic(pataUp)
-    }
-
-    companion object {
-        var instance: PataUpInspectorService? = null
     }
 }
