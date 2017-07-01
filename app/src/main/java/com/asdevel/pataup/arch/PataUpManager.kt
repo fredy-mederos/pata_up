@@ -32,6 +32,7 @@ object PataUpManager : MyLogger {
         set(value) {
             field = value
             internalScanning = value
+            lastPataStatus = false
             val serviceIntent = Intent(CommonApplication.instance, PataUpInspectorService::class.java)
             if (value) {
                 CommonApplication.instance.startService(serviceIntent)
@@ -39,17 +40,15 @@ object PataUpManager : MyLogger {
             } else {
                 CommonApplication.instance.stopService(serviceIntent)
                 NotificationManager.cancelNotification(NOTIFICATION_ID)
-                lastPataStatus = false
             }
             (pataUpStatus as MutableLiveData).postValue(lastPataStatus)
         }
 
     private fun launchNotification() {
-        NotificationManager.notifyGlobal(_getString(R.string.buscador_de_patas), _getString(if (lastPataStatus) R.string.pata_up else R.string.buscando_la_pata), R.drawable.ic_scanner_on_notify, NOTIFICATION_ID, object : NotificationManager.NotificationDecorator {
+        NotificationManager.notifyGlobal(_getString(R.string.buscador_de_patas), _getString(if (lastPataStatus) R.string.pata_up else R.string.buscando_la_pata), if (lastPataStatus) R.drawable.notify_pata_up else R.drawable.notify_searching_pata, NOTIFICATION_ID, object : NotificationManager.NotificationDecorator {
             override fun decorate(notificationBuilder: NotificationCompat.Builder) {
                 val bitmap = BitmapFactory.decodeResource(CommonApplication.instance.resources, if (lastPataStatus) R.drawable.pata_up_gray else R.drawable.dino_lupa_gray)
                 notificationBuilder.setLargeIcon(bitmap)
-                notificationBuilder.color = CommonApplication.instance.resources.getColor(R.color.dinosaurColor)
 
                 notificationBuilder.setAutoCancel(false)
                 notificationBuilder.setContentIntent(PendingIntent.getActivity(CommonApplication.instance, NOTIFICATION_ID, Intent(CommonApplication.instance, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT))
