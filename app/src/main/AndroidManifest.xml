@@ -3,6 +3,7 @@
     package="com.asdevel.pataup">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".MainApp"
@@ -20,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".arch.PataUpInspectorService" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="89cccde2f196cfb8540763f2bc7a40960115b362" />

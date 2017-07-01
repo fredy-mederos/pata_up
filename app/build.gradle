@@ -61,7 +61,10 @@ dependencies {
     compile "org.jetbrains.anko:anko-commons:0.10.0"
     compile "org.jetbrains.anko:anko-support-v4-commons:0.10.0"
 
+    compile "android.arch.lifecycle:extensions:$arch_version"
+
     kapt "com.android.databinding:compiler:$android_plugin_version"
+    kapt "android.arch.lifecycle:compiler:$arch_version"
 }
 
 repositories {

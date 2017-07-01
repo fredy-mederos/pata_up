@@ -1,5 +1,7 @@
 package com.common.binding
 
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.LifecycleRegistryOwner
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Build
@@ -12,7 +14,7 @@ import com.common.utils.MyLogger
  * Created by @Fredy.
  */
 
-abstract class BindingActivity<T : ViewDataBinding> : AppCompatActivity(), MyLogger{
+abstract class BindingActivity<T : ViewDataBinding> : AppCompatActivity(), MyLogger, LifecycleRegistryOwner {
 
     /**
      * Binding views.
@@ -40,4 +42,9 @@ abstract class BindingActivity<T : ViewDataBinding> : AppCompatActivity(), MyLog
             window.navigationBarColor = colorInt
         }
     }
+
+    @Suppress("LeakingThis")
+    private val mRegistry = LifecycleRegistry(this)
+
+    override fun getLifecycle(): LifecycleRegistry = mRegistry
 }

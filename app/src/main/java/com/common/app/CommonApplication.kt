@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
 import com.asdevel.pataup.BuildConfig
 
 /**
@@ -26,15 +25,6 @@ abstract class CommonApplication : Application() {
         val runningApps = mManager.runningAppProcesses
 
         return runningApps.any { it.uid == applicationInfo.uid && it.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND }
-    }
-
-    /**
-     * @return If the app is connected to internet.
-     */
-    private fun areWeConnected(): Boolean {
-        val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val ni = manager.activeNetworkInfo
-        return ni != null && ni.isConnected
     }
 
     /**

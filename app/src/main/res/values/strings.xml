@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Pata Up?</string>
     <string name="font_name">OCRAStd.otf</string>
+
+    <string name="on">on</string>
+    <string name="off">off</string>
+    <string name="pata_up">Pata Up!</string>
+    <string name="buscando_la_pata">Buscando la pata…</string>
+    <string name="pata_inspector_on">Pata Inspector On!</string>
 </resources>

@@ -1,33 +1,46 @@
 package com.asdevel.pataup
 
-import android.graphics.drawable.AnimationDrawable
+import android.arch.lifecycle.Observer
 import android.view.View
+import com.asdevel.pataup.arch.PataUpManager
 import com.asdevel.pataup.databinding.ActivityMainBinding
 import com.common.binding.BindingActivity
+import com.common.utils.animateWithDrawable
+import com.common.utils.gone
 
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
-    var scanning = false
-
     override fun onCreate() {
 
-        (BINDING_VIEWS.pathImageView.drawable as AnimationDrawable).start()
+        PataUpManager.pataUpStatus.observe(this, Observer {
+            onPataStatusChange(it ?: false)
+        })
 
         BINDING_VIEWS.scanButton.setOnClickListener {
-            scanning = !scanning
-            updateScanButtonFromState()
+            PataUpManager.scanning = !BINDING_VIEWS.scanButton.isSelected
         }
+
     }
 
-    fun updateScanButtonFromState() {
-        BINDING_VIEWS.scanButton.isSelected = scanning
-        BINDING_VIEWS.pathImageView.visibility = if(scanning) View.GONE else View.VISIBLE
-        BINDING_VIEWS.scanButton.text = if (scanning) "on" else "off"
-        BINDING_VIEWS.dinoImageView.setImageResource(if (scanning) R.drawable.pata_up else R.drawable.dino_lupa_white_running)
-        BINDING_VIEWS.statusTextView.text = if (scanning) "Pata Up!" else ""
+    fun onPataStatusChange(pataUp: Boolean) {
+        val scanOn = PataUpManager.scanning
 
-        if (!scanning && BINDING_VIEWS.dinoImageView.drawable is AnimationDrawable)
-            (BINDING_VIEWS.dinoImageView.drawable as AnimationDrawable).start()
+        BINDING_VIEWS.scanButton.isSelected = scanOn
+        BINDING_VIEWS.scanButton.text = getString(if (scanOn) R.string.on else R.string.off)
+
+        if (!scanOn) {
+            BINDING_VIEWS.dinoImageView.setImageResource(R.drawable.dino_lupa_white)
+            BINDING_VIEWS.statusTextView.text = ""
+            BINDING_VIEWS.pathImageView.gone()
+        } else {
+            if (pataUp)
+                BINDING_VIEWS.dinoImageView.setImageResource(R.drawable.pata_up)
+            else
+                BINDING_VIEWS.dinoImageView.animateWithDrawable(R.drawable.dino_lupa_white_running)
+
+            BINDING_VIEWS.pathImageView.visibility = if (pataUp) View.GONE else View.VISIBLE
+            BINDING_VIEWS.statusTextView.text = getString(if (pataUp) R.string.pata_up else R.string.buscando_la_pata)
+        }
     }
 
     override fun getLayoutResource(): Int = R.layout.activity_main

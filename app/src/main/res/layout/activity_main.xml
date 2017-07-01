@@ -34,8 +34,8 @@
 
         <ImageView
             android:id="@+id/path_imageView"
+            app:animation_drawable="@{@drawable/path_running}"
             app:layout_constraintBottom_toBottomOf="@+id/dino_imageView"
-            android:src="@drawable/path_running"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
