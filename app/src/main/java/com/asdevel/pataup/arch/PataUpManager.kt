@@ -45,9 +45,9 @@ object PataUpManager : MyLogger {
         }
 
     private fun launchNotification() {
-        NotificationManager.notifyGlobal(_getString(R.string.pata_inspector_on), _getString(if (lastPataStatus) R.string.pata_up else R.string.buscando_la_pata), R.drawable.ic_scanner_on_notify, NOTIFICATION_ID, object : NotificationManager.NotificationDecorator {
+        NotificationManager.notifyGlobal(_getString(R.string.buscador_de_patas), _getString(if (lastPataStatus) R.string.pata_up else R.string.buscando_la_pata), R.drawable.ic_scanner_on_notify, NOTIFICATION_ID, object : NotificationManager.NotificationDecorator {
             override fun decorate(notificationBuilder: NotificationCompat.Builder) {
-                val bitmap = BitmapFactory.decodeResource(CommonApplication.instance.resources, if (lastPataStatus) R.drawable.pata_up else R.drawable.dino_lupa_white)
+                val bitmap = BitmapFactory.decodeResource(CommonApplication.instance.resources, if (lastPataStatus) R.drawable.pata_up_gray else R.drawable.dino_lupa_gray)
                 notificationBuilder.setLargeIcon(bitmap)
                 notificationBuilder.color = CommonApplication.instance.resources.getColor(R.color.dinosaurColor)
 
@@ -68,7 +68,7 @@ object PataUpManager : MyLogger {
     /**
      * @return If the app is connected to internet.
      */
-    private fun areWeConnected(): Boolean {
+    fun areWeConnected(): Boolean {
         val manager = CommonApplication.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val ni = manager.activeNetworkInfo
         return ni != null && ni.isConnected

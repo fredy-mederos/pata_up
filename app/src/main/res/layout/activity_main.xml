@@ -29,6 +29,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/cloud"
+            android:id="@+id/cloud_imageView"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="Pata Up!"
+            tools:text="@string/inspector_off"
             android:textColor="@color/whiteColor"
             android:textSize="25sp"
             app:font_name="@{@string/font_name}"
@@ -67,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Inspector"
+            android:text="@string/buscador_de_patas"
             android:textColor="@color/dinosaurColor"
             android:textSize="14sp"
             app:font_name="@{@string/font_name}"
