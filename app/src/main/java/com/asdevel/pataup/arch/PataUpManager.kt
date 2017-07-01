@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.net.ConnectivityManager
 import android.os.Vibrator
 import android.support.v7.app.NotificationCompat
@@ -91,6 +92,10 @@ object PataUpManager : MyLogger {
             lastPataStatus = pataUp
             launchNotification()
             logRed("onPataStateChangeTic -> pataUp: $pataUp")
+
+            //Playing a sound!
+            val mediaPlayer : MediaPlayer = MediaPlayer.create(CommonApplication.instance, if(pataUp) R.raw.pata_up else R.raw.pata_down)
+            mediaPlayer.start()
 
             (CommonApplication.instance.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(200L)
         }
