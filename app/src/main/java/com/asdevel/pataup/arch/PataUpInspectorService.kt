@@ -15,8 +15,8 @@ import java.net.URL
  */
 class PataUpInspectorService : Service(), MyLogger {
 
-    val PATA_URL = "http://192.168.43.206:3000/generate_204"
-    //    val PATA_URL = "http://google.com/generate_204"
+//    val PATA_URL = "http://192.168.43.206:3000/generate_204"
+    val PATA_URL = "http://google.com/generate_204"
     val PATA_CHECK_INTERVAL: Long = 10 * 1_000
 
     var stoping = false
