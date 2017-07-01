@@ -46,6 +46,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.backgroundView, "TranslationY", -500f, 0f, 500, 200, DecelerateInterpolator()).start()
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.dinoImageView, "TranslationY", -300f, 0f, 500, 200, DecelerateInterpolator()).start()
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.cloudImageView, "TranslationY", -200f, 0f, 500, 200, DecelerateInterpolator()).start()
+        AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.settingsButton, "TranslationY", -200f, 0f, 500, 200, DecelerateInterpolator()).start()
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.statusTextView, "TranslationY", -400f, 0f, 500, 200, DecelerateInterpolator()).start()
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.scanButton, "TranslationY", -800f, 0f, 500, 200, DecelerateInterpolator()).start()
         AnimationUtils.newAnimatorOfFloat(BINDING_VIEWS.scanButtonText, "TranslationY", -900f, 0f, 500, 200, DecelerateInterpolator()).start()
