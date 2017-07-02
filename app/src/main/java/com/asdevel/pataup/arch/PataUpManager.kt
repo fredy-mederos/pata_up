@@ -60,7 +60,9 @@ object PataUpManager : MyLogger {
                 notificationBuilder.setContentIntent(PendingIntent.getActivity(CommonApplication.instance, NOTIFICATION_ID, Intent(CommonApplication.instance, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT))
             }
 
-            override fun decorate(notification: Notification) {}
+            override fun decorate(notification: Notification) {
+                notification.flags = notification.flags or NotificationCompat.FLAG_NO_CLEAR
+            }
         })
     }
 

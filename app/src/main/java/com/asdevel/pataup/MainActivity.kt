@@ -9,7 +9,6 @@ import com.common.binding.BindingActivity
 import com.common.utils.AnimationUtils
 import com.common.utils.animateWithDrawable
 import com.common.utils.gone
-import com.common.utils.visible
 import org.jetbrains.anko.toast
 
 class MainActivity : BindingActivity<ActivityMainBinding>() {
@@ -64,7 +63,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
             BINDING_VIEWS.statusTextView.text = getString(R.string.inspector_off)
             BINDING_VIEWS.statusTextView.textSize = 16f
             BINDING_VIEWS.pathImageView.gone()
-            BINDING_VIEWS.cloudImageView.visible()
+            BINDING_VIEWS.cloudImageView.gone()
         } else {
             BINDING_VIEWS.statusTextView.textSize = 25f
             if (pataUp)
