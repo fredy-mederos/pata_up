@@ -9,7 +9,6 @@ import com.common.binding.BindingActivity
 import com.common.utils.AnimationUtils
 import com.common.utils.animateWithDrawable
 import com.common.utils.gone
-import org.jetbrains.anko.toast
 
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
@@ -26,13 +25,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         })
 
         BINDING_VIEWS.scanButton.setOnClickListener {
-            if (!BINDING_VIEWS.scanButton.isSelected) {
-                if (MainApp.isTestMode() || PataUpManager.areWeConnected())
-                    PataUpManager.scanning = !BINDING_VIEWS.scanButton.isSelected
-                else
-                    toast(R.string.no_network)
-            } else
-                PataUpManager.scanning = !BINDING_VIEWS.scanButton.isSelected
+            PataUpManager.scanning = !BINDING_VIEWS.scanButton.isSelected
         }
 
         animIn()
