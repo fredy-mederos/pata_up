@@ -38,8 +38,8 @@ class PataUpInspectorService : Service(), MyLogger {
                 try {
                     val url = URL(PATA_URL)
                     val httpUrlConnection = url.openConnection() as HttpURLConnection
-                    httpUrlConnection.connectTimeout = 6000 // Timeout is in seconds
-                    httpUrlConnection.readTimeout = 6000
+                    httpUrlConnection.connectTimeout = 15_000 // Timeout is in seconds
+                    httpUrlConnection.readTimeout = 15_000
                     httpUrlConnection.connect()
                     pataUp = httpUrlConnection.responseCode == HttpURLConnection.HTTP_NO_CONTENT
                 } catch (ex: Exception) {
