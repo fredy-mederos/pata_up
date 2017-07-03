@@ -10,4 +10,7 @@
     <string name="no_network">No estás conectado a la WiFi!</string>
     <string name="inspector_off">Actívame como buscador de patas para avisarte cuando estemos online!</string>
     <string name="buscador_de_patas">Buscador de patas</string>
+    <string name="buena">Buena</string>
+    <string name="regular">Regular</string>
+    <string name="mala">Mala</string>
 </resources>

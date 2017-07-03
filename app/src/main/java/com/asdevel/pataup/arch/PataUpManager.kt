@@ -23,9 +23,21 @@ import com.common.utils._getString
  */
 object PataUpManager : MyLogger {
 
-    private val LAST_PATA_STATUS_PREF = "LAST_PATA_STATUS_PREF"
-    private val INTERNAL_SCANNING_PREF = "INTERNAL_SCANNING_PREF"
-    private val NOTIFICATION_ID = 1234521
+    const private val LAST_PATA_STATUS_PREF = "LAST_PATA_STATUS_PREF"
+    const private val INTERNAL_SCANNING_PREF = "INTERNAL_SCANNING_PREF"
+    //    const private val ELAPSED_TIMES = "ELAPSED_TIMES"
+    const private val LAST_ELAPSED_TIME_PREF = "LAST_ELAPSED_TIME_PREF"
+    const private val NOTIFICATION_ID = 1234521
+
+    //    const val PATA_URL = "http://192.168.43.206:3000/generate_204"
+//    const val PATA_URL = "http://192.168.1.71:3000/generate_204"
+    const val PATA_URL = "http://google.com/generate_204"
+
+    const val PATA_CHECK_INTERVAL: Long = 10 * 1_000 //Ten seconds between pata checker tics
+
+    const val TIME_OUT_TIME = 60 * 1_000
+
+    const val MAX_ELAPSED_TIMES_COUNT = 10
 
     internal var internalScanning: Boolean
         get() = CommonApplication.instance.getPreferences().getBoolean(INTERNAL_SCANNING_PREF, false)
@@ -39,6 +51,8 @@ object PataUpManager : MyLogger {
             field = value
             internalScanning = value
             lastPataStatus = false
+            lastElapsedTime = 0
+
             val serviceIntent = Intent(CommonApplication.instance, PataUpInspectorService::class.java)
             if (value) {
                 CommonApplication.instance.startService(serviceIntent)
@@ -47,7 +61,6 @@ object PataUpManager : MyLogger {
                 CommonApplication.instance.stopService(serviceIntent)
                 NotificationManager.cancelNotification(NOTIFICATION_ID)
             }
-            (pataUpStatus as MutableLiveData).postValue(lastPataStatus)
         }
 
     private fun launchNotification() {
@@ -72,6 +85,12 @@ object PataUpManager : MyLogger {
         liveData
     }
 
+    val elapsedTimesStatus: LiveData<Long> by lazy {
+        val liveData = MutableLiveData<Long>()
+        liveData.value = lastElapsedTime
+        liveData
+    }
+
     /**
      * @return If the app is connected to internet.
      */
@@ -85,12 +104,38 @@ object PataUpManager : MyLogger {
         get() = CommonApplication.instance.getPreferences().getBoolean(LAST_PATA_STATUS_PREF, false)
         set(value) {
             CommonApplication.instance.getPreferences().edit().putBoolean(LAST_PATA_STATUS_PREF, value).apply()
+            (pataUpStatus as MutableLiveData).postValue(value)
         }
 
-    internal fun onPataStateChangeTic(pataUp: Boolean) {
+    private var lastElapsedTime: Long
+        get() = CommonApplication.instance.getPreferences().getLong(LAST_ELAPSED_TIME_PREF, 0)
+        set(value) {
+            CommonApplication.instance.getPreferences().edit().putLong(LAST_ELAPSED_TIME_PREF, value).apply()
+            (elapsedTimesStatus as MutableLiveData).postValue(value)
+        }
+//    @SuppressLint("ApplySharedPref")
+//    private fun addElapsedTime(eTime: Long, callback: (LongArray) -> Unit) {
+//        doAsync {
+//            val elapsedTimes: ArrayList<Long> = ArrayList(getElapsedTimes().toList())
+//            if (elapsedTimes.size >= MAX_ELAPSED_TIMES_COUNT)
+//                elapsedTimes.removeAt(0)
+//            elapsedTimes.add(eTime)
+//
+//            //saving elapsed time
+//            CommonApplication.instance.getPreferences().edit().putString(ELAPSED_TIMES, elapsedTimes.toJson()).commit()
+//            uiThread {
+//                callback(getElapsedTimes())
+//            }
+//        }
+//    }
+
+//    private fun cleanElapsedTimes() = CommonApplication.instance.getPreferences().edit().putString(ELAPSED_TIMES, null).apply()
+
+//    private fun getElapsedTimes(): LongArray = GsonUtils.fromJson(CommonApplication.instance.getPreferences().getString(ELAPSED_TIMES, null), LongArray::class.java) ?: longArrayOf()
+
+    internal fun onPataStateChangeTic(pataUp: Boolean, elapsedTime: Long) {
         //if last state is different to current state. then notify!
         if (lastPataStatus != pataUp) {
-            (pataUpStatus as MutableLiveData).postValue(pataUp)
             lastPataStatus = pataUp
             launchNotification()
             logRed("onPataStateChangeTic -> pataUp: $pataUp")
@@ -101,5 +146,7 @@ object PataUpManager : MyLogger {
 
             (CommonApplication.instance.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(200L)
         }
+//        addElapsedTime(elapsedTime, { (elapsedTimesStatus as MutableLiveData).postValue(it) })
+        lastElapsedTime = elapsedTime
     }
 }

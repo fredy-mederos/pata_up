@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -32,6 +33,15 @@ fun ImageView.animateWithDrawable(drawable: Drawable) {
     setImageDrawable(drawable)
     if (drawable is AnimationDrawable)
         drawable.start()
+}
+
+@BindingAdapter("text_html")
+fun TextView.setTextHtml(text: String?) {
+    @Suppress("DEPRECATION")
+    if (text != null && text.isNotEmpty())
+        setText(Html.fromHtml(text))
+    else
+        setText("")
 }
 
 fun View.setHeight(height: Int) {

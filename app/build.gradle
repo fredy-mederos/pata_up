@@ -48,6 +48,8 @@ dependencies {
     compile "com.android.support:design:$android_support_version"
     compile "com.android.support:support-vector-drawable:$android_support_version"
 
+    compile "com.google.code.gson:gson:2.8.0"
+
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {

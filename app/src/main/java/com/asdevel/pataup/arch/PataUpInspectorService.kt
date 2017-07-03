@@ -3,6 +3,9 @@ package com.asdevel.pataup.arch
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.asdevel.pataup.arch.PataUpManager.PATA_CHECK_INTERVAL
+import com.asdevel.pataup.arch.PataUpManager.PATA_URL
+import com.asdevel.pataup.arch.PataUpManager.TIME_OUT_TIME
 import com.common.utils.MyLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -14,10 +17,6 @@ import java.net.URL
  * Created by @Fredy.
  */
 class PataUpInspectorService : Service(), MyLogger {
-
-//    val PATA_URL = "http://192.168.43.206:3000/generate_204"
-    val PATA_URL = "http://google.com/generate_204"
-    val PATA_CHECK_INTERVAL: Long = 10 * 1_000 //Ten seconds between pata checker tics
 
     var stoping = false
 
@@ -35,19 +34,27 @@ class PataUpInspectorService : Service(), MyLogger {
         doAsync {
             while (!stoping) {
                 var pataUp: Boolean
+                var elapsedTime: Long
                 try {
                     val url = URL(PATA_URL)
                     val httpUrlConnection = url.openConnection() as HttpURLConnection
-                    httpUrlConnection.connectTimeout = 15_000 // Timeout is in seconds
-                    httpUrlConnection.readTimeout = 15_000
+                    httpUrlConnection.connectTimeout = TIME_OUT_TIME // Timeout is in seconds
+                    httpUrlConnection.readTimeout = TIME_OUT_TIME
+
+                    val currentTimeMillis = System.currentTimeMillis()
                     httpUrlConnection.connect()
                     pataUp = httpUrlConnection.responseCode == HttpURLConnection.HTTP_NO_CONTENT
+                    elapsedTime = System.currentTimeMillis() - currentTimeMillis
+
+                    logRed("pataUp: $pataUp Elapsed Time:$elapsedTime")
+
                 } catch (ex: Exception) {
                     logRed("Error when trying to connect: ${ex.message}")
                     pataUp = false
+                    elapsedTime = TIME_OUT_TIME.toLong()
                 }
                 uiThread {
-                    onGetPataStatus(pataUp)
+                    onGetPataStatus(pataUp, elapsedTime)
                 }
                 try {
                     Thread.sleep(PATA_CHECK_INTERVAL)
@@ -65,8 +72,8 @@ class PataUpInspectorService : Service(), MyLogger {
         super.onDestroy()
     }
 
-    fun onGetPataStatus(pataUp: Boolean) {
+    fun onGetPataStatus(pataUp: Boolean, elapsedTime: Long) {
         logRed("onGetPataStatus -> pataUp: $pataUp")
-        PataUpManager.onPataStateChangeTic(pataUp)
+        PataUpManager.onPataStateChangeTic(pataUp, elapsedTime)
     }
 }
